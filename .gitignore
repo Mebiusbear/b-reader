@@ -1,0 +1,10 @@
+# floder
+node_modules/*
+bookshelf/*
+out/*
+
+# file
+package.json
+
+# should keep down
+!bookshelf/README.md
