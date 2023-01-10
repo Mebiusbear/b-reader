@@ -1,0 +1,106 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  /* height: 100%; */
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  
+  background-color: rgb(192, 192, 192);
+
+}
+
+#app {
+  position: fixed;
+  left: 10px;
+  right: 10px;
+  top: 10px;
+  bottom: 10px;
+  padding: 0;
+  margin: 0;
+  overflow-y: auto;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.content {
+  background: transparent;
+  color: rgb(0, 0, 0);
+  font-size: 19px;
+  /* white-space: pre-line; */
+  word-break: break-all;
+  word-wrap: break-word;
+  line-height: 1.5;
+}
+
+#footer {
+  /* border: dashed 2px orange; */
+  width: 100%;
+  column-count: 3;
+  column-gap: 0px;
+  column-rule: solid 0px gainsboro;
+  
+  -moz-column-count: 3;
+  -moz-column-gap: 0px;
+  -moz-column-rule: solid 0px gainsboro;
+  
+  -webkit-column-count: 3;
+  -webkit-column-gap: 0px;
+  -webkit-column-rule: solid 0px gainsboro;
+  position: fixed;
+  left  : 10px;
+  bottom: 0px;
+  right : 10px; 
+  width : 95%;
+  background-color: #C0C0C0;
+  color: rgb(0, 0, 0);
+  text-align: center;
+}
+
+
+h1 {
+  color: rgb(0, 0, 0);
+}
+
+#contextmenu {
+  z-index: 9999;
+  position: fixed;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  padding: 0;
+  /* transition: all .1s ease; */
+  border: 1px solid #282c34;
+  list-style: none;
+  background: #fff;
+}
+
+#contextmenu li {
+  width: 100%;
+}
+
+#contextmenu li.divided {
+  height: 1px;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+#contextmenu li a {
+  cursor: pointer;
+  display: block;
+  text-decoration: none;
+  color: #282c34;
+  width: 100%;
+  text-align: center;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+#contextmenu li:first-of-type {
+  border-radius: 5px 5px 0 0;
+}
+
+#contextmenu li a:hover,
+#contextmenu li a:active {
+  background: #eee;
+  color: #0aaf88;
+}

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail setting</title>
+
+    <style>
+        pre,
+        textarea {
+            width: 100%;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div>
+        Request group:
+        <select id="sltRequestGroup"></select>
+    </div>
+
+    <div>
+        name:
+        <input id="inputName">
+    </div>
+
+    <div>
+        url: <em>multi urls</em>
+        <textarea id="areaUrls"></textarea>
+    </div>
+
+    <div id="loadResult"></div>
+    <div>
+        <!-- <button id="btnTest">test</button> -->
+        <button id="btnSave">save</button>
+        <button id="btnLoad">load</button>
+        <button id="btnTest">test</button>
+    </div>
+    <script>
+
+        const vscode = acquireVsCodeApi();
+
+        document.getElementById('btnSave').addEventListener('click', () => {
+            vscode.postMessage({
+                command: 'saveConfig',
+                data: {
+                    name: document.getElementById('inputName').value,
+                    requestGroupName: document.getElementById('sltRequestGroup').value,
+                    urls: document.getElementById("areaUrls").value
+                }
+            });
+        });
+
+        document.getElementById('btnTest').addEventListener('click', () => {
+            vscode.postMessage({
+                command: 'Test',
+                data: {
+                    name: "bear",
+                    urls: "https://www.bqg78.com/book/2749/"
+                }
+            });
+        });
+
+        document.getElementById('btnLoad').addEventListener('click', () => {
+            vscode.postMessage({
+                command: 'loadData',
+                data: {
+                    name: document.getElementById('inputName').value,
+                    requestGroupName: document.getElementById('sltRequestGroup').value,
+                    urls: document.getElementById("areaUrls").value
+                }
+            });
+        });
+
+
+        window.addEventListener('message', event => {
+            const message = event.data; // The JSON data our extension sent
+
+            switch (message.command) {
+                case 'loadingResult':
+                    let data = message.data;
+                    let text = `${data.index}/${data.total}`;
+                    document.getElementById('loadResult').innerText = text;
+                    break;
+            }
+        });
+
+    </script>
+</body>
+
+</html>
