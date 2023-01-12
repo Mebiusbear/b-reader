@@ -1,0 +1,118 @@
+{
+	"name": "b-reader",
+	"description": "搜书,可在线、可缓存（新上线，欢迎提意见）",
+	"version": "0.2.1",
+	"publisher": "bear",
+	"private": true,
+	"license": "None",
+	"repository": {
+		"type": "git",
+		"url": "https://gitee.com/Mebiusbear/b-reader"
+	},
+	"engines": {
+		"vscode": "^1.71.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"onCommand:b-reader.start",
+		"onCommand:b-reader.NextChapter",
+		"onCommand:b-reader.PreChapter",
+		"onCommand:b-reader.searchOnline",
+		"onCommand:b-reader.test",
+		"onWebviewPanel:b-reader",
+		"onView:testView",
+		"onView:nodeDependencies",
+		"onCommand:testView.reveal"
+	],
+	"main": "./out/extension.js",
+	"contributes": {
+		"viewsContainers": {
+			"activitybar": [
+				{
+					"id": "hello_chapter",
+					"title": "b-reader",
+					"icon": "icon/dep.svg"
+				}
+			]
+		},
+		"views": {
+			"hello_chapter": [
+				{
+					"id": "nodeDependencies",
+					"name": "小说阅读器",
+					"icon": "icon/dep.svg",
+					"contextualTitle": "b-reader"
+				}
+			],
+			"explorer": [
+				{
+					"id": "testView",
+					"name": "Test View"
+				},
+				{
+					"id": "testViewDragAndDrop",
+					"name": "Test View Drag and Drop"
+				}
+			]
+		},
+		"commands": [
+			{
+				"command": "b-reader.start",
+				"title": "Start read",
+				"category": "b-reader"
+			},
+			{
+				"command": "b-reader.NextChapter",
+				"title": "NextChapter",
+				"category": "b-reader"
+			},
+			{
+				"command": "b-reader.PreChapter",
+				"title": "PreChapter",
+				"category": "b-reader"
+			},
+			{
+				"command": "b-reader.searchOnline",
+				"title": "searchOnline",
+				"category": "b-reader"
+			},
+			{
+				"command": "b-reader.test",
+				"title": "test",
+				"category": "b-reader"
+			},
+			{
+				"command": "b-reader.reveal",
+				"title": "reveal",
+				"category": "b-reader"
+			},
+			{
+				"command": "b-reader.changeTitle",
+				"title": "changeTitle",
+				"category": "b-reader"
+			}
+		]
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"lint": "eslint \"src/**/*.ts\"",
+		"watch": "tsc -w -p ./"
+	},
+	"devDependencies": {
+		"@types/node": "^16.11.7",
+		"@types/vscode": "^1.67.0",
+		"@typescript-eslint/eslint-plugin": "^5.42.0",
+		"@typescript-eslint/parser": "^5.42.0",
+		"eslint": "^8.26.0",
+		"typescript": "^4.8.4"
+	},
+	"dependencies": {
+		"@vscode/vsce": "^2.16.0",
+		"axios": "^0.27.1",
+		"cheerio": "^1.0.0-rc.12",
+		"tsc-node": "^0.0.3"
+	}
+}

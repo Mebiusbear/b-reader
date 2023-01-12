@@ -25,11 +25,12 @@ export class DepNodeProvider implements vscode.TreeDataProvider<Dependency> {
 
 	getChildren(element?: Dependency): Thenable<Dependency[]> {
 		
-		if (element){
+		if (element){ // TODO class可以不带书名
 			switch (element.group){
 				case 2 : {
 					const book_root   = store.book_path(element.bookname);
 					const book_json_f = fs.readFileSync(book_root["meta"],{encoding:"utf-8"});
+					const chapter_exist:Array<string> = fs.readdirSync(store.book_path(element.bookname)["content"])
 					const book_json   = JSON.parse(book_json_f);
 					const group_data  = JSON.parse("{}")
 					const res: Dependency[]          = [];
@@ -39,12 +40,14 @@ export class DepNodeProvider implements vscode.TreeDataProvider<Dependency> {
 						const chapter_json = val as node_data
 						if (!chapter_group.includes(chapter_json.chapter_group)) {
 							group_data[chapter_json.chapter_group] = [];
-							group_data[chapter_json.chapter_group].push(chapter_json);
 							chapter_group.push((val as node_data).chapter_group);
 						}
-						else {
-							group_data[chapter_json.chapter_group].push(chapter_json);
+						if (!chapter_exist.includes(chapter_json.chapter_name + ".txt")) {
+							chapter_json.chapter_exist = false;
+						}else {
+							chapter_json.chapter_exist = true;
 						}
+						group_data[chapter_json.chapter_group].push(chapter_json);
 					})
 					book_store.set_book_json(element.bookname,group_data)
 					
@@ -58,6 +61,11 @@ export class DepNodeProvider implements vscode.TreeDataProvider<Dependency> {
 				case 1 : {
 					const res: Dependency[] = [];
 					(book_store.book_json[element.bookname][element.label] as node_data[]).forEach((val,ind) => {
+						if (!val.chapter_exist){
+							// TODO 将文字该图标
+							val.chapter_name += "(未下载)";
+							console.log(val.chapter_name);
+						}
 						res.push(
 							new Dependency(val.chapter_name,"",0,element.bookname,vscode.TreeItemCollapsibleState.None,{
 								command:"b-reader.test",

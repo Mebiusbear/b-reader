@@ -57,7 +57,7 @@ export const searchOnline_bqg = async function (book_data:search_data) {
                     urls: bqg_url + $(a).attr("href") as string})
             }
         })
-
+        // TODO 公式化这一段
         const total_count:number =  Math.floor(chapter_list.length / 50);
         let book_json = JSON.parse('{}');
         let count:number = 0;
@@ -167,7 +167,7 @@ export const searchOnline = async function () {
     // console.log(msg);
 };
 
-
+// TODO 类化download
 class Online_novel {
     public chapters_text: NovelText[] = []
     // public search_url = "http://www.xhytd.com"
