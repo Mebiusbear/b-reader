@@ -1,7 +1,6 @@
 # floder
 node_modules/*
 bookshelf/*
-out/*
 
 # file
 package-lock.json
