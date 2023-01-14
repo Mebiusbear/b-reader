@@ -11,7 +11,9 @@ import { search } from "./utils/search"
 
 export function activate(context: vscode.ExtensionContext) {
     store.rootdir = context.extensionUri.fsPath;
-
+    console.log(store.rootdir);
+    // FIXME 调试打包后地址分布
+    
     const b = search.search_function("万族之劫");
     b.then( res => {search.get_catalogue(res[0])});
     
