@@ -1,2 +1,11 @@
+# floder
+node_modules/*
 bookshelf/*
+out/*
+
+# file
+package-lock.json
+.DS_Store
+
+# should keep down
 !bookshelf/README.md

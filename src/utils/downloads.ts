@@ -10,9 +10,14 @@ import path = require("path");
 import { NovelUrl,
         NovelText,
         search_data,
+        book_data,
         node_data} from "../@types"
 
-// const got = require("got")
+interface chapter_d {
+    sortId?: number,
+    name : string,
+    urls : string
+}
 
 
 export function searchOn_bqg (bookname : string): Promise<search_data[]> {
@@ -37,11 +42,7 @@ export function searchOn_bqg (bookname : string): Promise<search_data[]> {
     })
 }
 
-interface chapter_d {
-    sortId?: number,
-    name : string,
-    urls : string
-}
+
 
 export const searchOnline_bqg = async function (book_data:search_data) {
     const book_name = `${book_data.bookname}-${book_data.author}`
@@ -122,7 +123,7 @@ export const downloadOnline_bqg = async function (book_data:search_data) {
                 let chapter_content = $("#chaptercontent").html()!;
                 chapter_content     = chapter_content.replace(/<br><br>/g,"\n");
                 chapter_content     = chapter_content.replace(/(<p.*?p>)/g,"");
-                fs.writeFileSync(chapter_json.chapter_path,chapter_content,{encoding:"utf-8"});
+                fs.writeFileSync(chapter_json.chapter_path!,chapter_content,{encoding:"utf-8"});
             }).catch(error => {
                 let chapter_path = path.join(store.book_path(`${book_data.bookname}-${book_data.author}`)["error_chapter"],`${chapter_json.chapter_name}.txt`)
                 fs.writeFileSync(chapter_path,"",{encoding:"utf-8"}); // meta加判定

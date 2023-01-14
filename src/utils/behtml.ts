@@ -19,7 +19,7 @@ function load_text(text_list: string[]) {
 export function html_out (chapter_json:node_data,webview:vscode.Webview){
 	const js_data = store.script_list(webview);
 	// FIXME 找不到文件后进行下载
-	const chapter_content = fs.readFileSync(chapter_json.chapter_path,{encoding:"utf-8"}).split("\n")
+	const chapter_content = fs.readFileSync(chapter_json.chapter_path!,{encoding:"utf-8"}).split("\n")
 	const html_template_path:string = store.templateHtml();
 	const html_template     :string = load_template(html_template_path);
 	const html_output       :string = html_template.replace(/\{\{([A-Za-z0-9-_]+)\}\}/gi,

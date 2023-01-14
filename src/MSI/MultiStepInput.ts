@@ -69,6 +69,8 @@ export async function multiStepInput(context: ExtensionContext) {
 		const book_url = search_list[book_id].book_url;
 		await searchOnline_bqg(search_list[book_id])
 		await downloadOnline_bqg(search_list[book_id])
+		// TODO 加上最后确认一步
+		// TODO 下载进度显示
 	}
 
 

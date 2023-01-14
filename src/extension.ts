@@ -5,9 +5,16 @@ import { DepNodeProvider } from "./TV/nodeDependency"
 import { ReaderPanel } from "./webview/ReaderPanel"
 
 import { node_data } from "./@types"
+import { search } from "./utils/search"
+
+
 
 export function activate(context: vscode.ExtensionContext) {
     store.rootdir = context.extensionUri.fsPath;
+
+    const b = search.search_function("万族之劫");
+    b.then( res => {search.get_catalogue(res[0])});
+    
 	const nodeDependenciesProvider = new DepNodeProvider();
 	vscode.window.registerTreeDataProvider('nodeDependencies', nodeDependenciesProvider);
 

@@ -15,6 +15,7 @@ export class DepNodeProvider implements vscode.TreeDataProvider<Dependency> {
 	}
 
 	refresh(): void {
+		// TODO 写一个refresh
 		this._onDidChangeTreeData.fire();
 	}
 
@@ -25,7 +26,8 @@ export class DepNodeProvider implements vscode.TreeDataProvider<Dependency> {
 
 	getChildren(element?: Dependency): Thenable<Dependency[]> {
 		
-		if (element){ // TODO class可以不带书名
+		if (element){ 
+			// TODO Dependency class可以不带书名
 			switch (element.group){
 				case 2 : {
 					const book_root   = store.book_path(element.bookname);
@@ -38,16 +40,16 @@ export class DepNodeProvider implements vscode.TreeDataProvider<Dependency> {
 
 					Object.values(book_json).map ( (val,ind) => {
 						const chapter_json = val as node_data
-						if (!chapter_group.includes(chapter_json.chapter_group)) {
-							group_data[chapter_json.chapter_group] = [];
-							chapter_group.push((val as node_data).chapter_group);
+						if (!chapter_group.includes(chapter_json.chapter_group!)) {
+							group_data[chapter_json.chapter_group!] = [];
+							chapter_group.push((val as node_data).chapter_group!);
 						}
 						if (!chapter_exist.includes(chapter_json.chapter_name + ".txt")) {
 							chapter_json.chapter_exist = false;
 						}else {
 							chapter_json.chapter_exist = true;
 						}
-						group_data[chapter_json.chapter_group].push(chapter_json);
+						group_data[chapter_json.chapter_group!].push(chapter_json);
 					})
 					book_store.set_book_json(element.bookname,group_data)
 					
