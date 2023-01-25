@@ -37,7 +37,7 @@ class Store {
 	}
 
 	chapter_path (book_name:string,chapter_name:string) {
-		return path.join(this.rootdir,"bookshelf",book_name,`${chapter_name}.txt`)
+		return path.join(this.rootdir,"bookshelf",book_name,"content",`${chapter_name}.txt`)
 	}
 
 	script_list (webview:vscode.Webview) {

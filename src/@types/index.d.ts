@@ -1,12 +1,3 @@
-export interface NovelUrl {
-    title: string,
-    url: string,
-}
-
-export interface NovelText {
-    title: string,
-    text: string,
-}
 
 export interface search_data {
 	bookname : string,

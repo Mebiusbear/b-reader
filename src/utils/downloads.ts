@@ -7,11 +7,8 @@ import fs = require("fs")
 import {store} from "./store"
 import path = require("path");
 
-import { NovelUrl,
-        NovelText,
-        search_data,
-        book_data,
-        node_data} from "../@types"
+import { search_data,
+         node_data } from "../@types"
 
 interface chapter_d {
     sortId?: number,
@@ -19,7 +16,7 @@ interface chapter_d {
     urls : string
 }
 
-
+// TODO 类化download
 export function searchOn_bqg (bookname : string): Promise<search_data[]> {
     const bqg_url:string = "https://www.bqg78.com"
     return new Promise ((resolve) => {
@@ -68,6 +65,7 @@ export const searchOnline_bqg = async function (book_data:search_data) {
 
             while (ccount < (count+1)*50) {
                 let chapter_name = chapter_list[ccount].name;
+                // TODO 修改为相对路径
                 let chapter_path = path.join(store.book_path(book_name)["content"],`${chapter_name}.txt`);
 
                 const chapter_json:node_data = {book_name    : book_name,
@@ -168,54 +166,3 @@ export const searchOnline = async function () {
     // console.log(msg);
 };
 
-// TODO 类化download
-class Online_novel {
-    public chapters_text: NovelText[] = []
-    // public search_url = "http://www.xhytd.com"
-    public search_url = "https://www.bqg78.com"
-    public url = ""
-
-	async set_url(url:string){
-		this.url = url
-	}
-
-    async getHTML(url: string) {
-        const HTML = "1"
-        console.log(HTML)
-        return HTML
-    }
-
-    async getNovelUrl(novel_url: string=this.url) {
-        const chapters_list: NovelUrl[] = []
-        console.log(novel_url)
-        const html = await this.getHTML(novel_url)
-        const $ = cheerio.load(html)
-        $("dd a").map((i,a) => {
-            const origin_url: string = String($(a).attr("href"))
-            console.log(origin_url)
-            const title: string = $(a).text()
-            const url: string = this.search_url + origin_url
-			chapters_list.push({title, url});
-        })
-        // console.log(chapters_list)
-        return chapters_list
-    }
-
-    async getNovelText(chapter_url: string) {
-        const html = await this.getHTML(chapter_url)
-
-        const $ = cheerio.load(html)
-        const re_br = /<br>/gi
-        const re_space = /&nbsp;/gi
-
-        var text = String($("#content").html())
-        text = text.replace(re_br,"\n")
-        text = text.replace(re_space,"  ")
-        return text
-    }
-
-}
-
-
-
-export {Online_novel}

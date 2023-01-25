@@ -14,8 +14,10 @@ export function activate(context: vscode.ExtensionContext) {
     console.log(store.rootdir);
     // FIXME 调试打包后地址分布
     
-    const b = search.search_function("万族之劫");
-    b.then( res => {search.get_catalogue(res[0])});
+    // const b = search.search_function("万族之劫", ".bookbox");
+    // search.get_catalogue(b)
+    
+    // b.then( res => {search.get_catalogue(res[0])});
     
 	const nodeDependenciesProvider = new DepNodeProvider();
 	vscode.window.registerTreeDataProvider('nodeDependencies', nodeDependenciesProvider);

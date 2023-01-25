@@ -1,7 +1,9 @@
 import axios from "axios";
 import cheerio = require("cheerio");
+import path = require("path");
+import { writeFileSync } from "fs";
 import { book_data,node_data } from "../@types";
-
+import { store } from "./store";
 
 class Search {
     public origin_url : string;
@@ -43,13 +45,13 @@ class Search {
         })
     }
 
-    search_function (book_name:string): Promise<book_data[]>  {
+    search_function (book_name:string, search_div:string): Promise<book_data[]>  {
         const search_url  =  `${this.origin_url}${this.part_search}`;
         const HTML = this.get_HTML(`${search_url}${encodeURI(book_name)}`);
         let search_list : book_data[] = []
     
         return new Promise ( (resolve) => {
-            this.html_match(HTML,".bookbox").then (div_html => {
+            this.html_match(HTML,search_div).then (div_html => {
                 // FIXME 如果搜索不到
                 div_html.map ( (val,ind) => {
                     const $ = cheerio.load(val);
@@ -61,14 +63,30 @@ class Search {
                         book_url    : $(".bookname a").attr("href")!
                     })
                 })
+                
                 resolve(search_list);
             })
         })
     }
 
+	meta_output (chapter_list_p:Promise<node_data[]>) {
+        let book_json = JSON.parse('{}');
+		chapter_list_p.then (
+			res => {
+				res.map ( (val,index) => {
+					const chapter_group_id = Number(val.chapter_group);
+					book_json[index] = val;
+					book_json[index].chapter_group = `第${chapter_group_id*50}章-第${chapter_group_id*50+50}章`;
+					book_json[index].chapter_path  = store.chapter_path(val.book_name,val.chapter_name);
+				})
+				writeFileSync(store.book_path(book_json["0"].book_name)["meta"],JSON.stringify(book_json,null,2),{encoding:"utf-8"});
+			}
+		)
+	}
+
 	get_catalogue (search_data: book_data) {
 		const book_name = `${search_data.book_name}-${search_data.book_author}`;
-		const book_url = `${this.origin_url}${search_data.book_url}`;
+		const book_url  = `${this.origin_url}${search_data.book_url}`;
 
 		const chapter_list:Promise<node_data[]> = axios.get(book_url).then(res => {
 			const chapter_list:node_data[] = [];
@@ -76,20 +94,27 @@ class Search {
 			$("div.listmain dd a").map((item, a) => {
 				if ($(a).attr("href")!.match(/book/g)){
 					chapter_list.push({book_name    : book_name,
-									   chapter_name : $(a).text(),
-									   chapter_url  : `${this.origin_url}${$(a).attr("href")}`,
-									   chapter_id   : item});
+										chapter_name : $(a).text(),
+										chapter_url  : `${this.origin_url}${$(a).attr("href")}`,
+										chapter_id   : item});
 				}
 			})
 			return chapter_list
 		})
+		// NOTE 处理chapter_group
 		chapter_list.then(res => {
+			let count = 0;
 			res.map ((val,ind) => {
-				res[ind].chapter_group = "0";
+				if (val.chapter_id <= 50*(count+1)) {
+					val.chapter_group = String(count);
+				}
+				else {
+					count ++;
+					val.chapter_group = String(count);
+				}
 			})
 		})
-		console.log(chapter_list);
-		
+		this.meta_output(chapter_list)
 	}
 }
 

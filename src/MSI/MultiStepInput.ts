@@ -1,7 +1,8 @@
 import { QuickPickItem, window, Disposable, CancellationToken, QuickInputButton, QuickInput, ExtensionContext, QuickInputButtons, Uri } from 'vscode';
 import { searchOn_bqg ,searchOnline_bqg, downloadOnline_bqg } from "../utils/downloads"
 import { MultiStepInput } from "./MultiStepInput_class"
-import { search_data } from "../@types"
+import { book_data, search_data } from "../@types"
+import { search } from '../utils/search';
 
 
 export const Sleep = (ms:number)=> {
@@ -41,16 +42,15 @@ export async function multiStepInput(context: ExtensionContext) {
 			shouldResume: shouldResume
         })
 
-		const bookname = encodeURI(`${state.resourceGroup}`)
-		
-		const search_list : search_data[] = await searchOn_bqg(bookname)
+		const bookname = state.resourceGroup;
+		const search_list:  book_data[] = await search.search_function(bookname, ".bookbox");
 		// 如果为空
         return (input: MultiStepInput) => pickBookSource(input,state,search_list);
     }
 
-    async function pickBookSource(input: MultiStepInput, state: Partial<State>,search_list:search_data[]) {
+    async function pickBookSource(input: MultiStepInput, state: Partial<State>,search_list:book_data[]) {
 		const booksourcelist : QuickPickItem[] = search_list.map((val,ind) => {
-			return `id : ${ind} , ${val.author} => ${val.bookname}`
+			return `id : ${ind} , ${val.book_author} => ${val.book_name}`
 		}).map (label => ({label}));
 
 		const pick = await input.showQuickPick({
@@ -67,8 +67,9 @@ export async function multiStepInput(context: ExtensionContext) {
 		
 		const book_id:number = Number(pick.label.match(/id : (.*?), /)![1]);
 		const book_url = search_list[book_id].book_url;
-		await searchOnline_bqg(search_list[book_id])
-		await downloadOnline_bqg(search_list[book_id])
+		search.get_catalogue(search_list[book_id])
+		// await searchOnline_bqg(search_list[book_id])
+		// await downloadOnline_bqg(search_list[book_id])
 		// TODO 加上最后确认一步
 		// TODO 下载进度显示
 	}
